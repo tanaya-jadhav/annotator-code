@@ -1,0 +1,184 @@
+
+USAGE: 
+
+   phobos  [-M <exact|extendExact|imperfect>] [-g <int>] [-m <int>] [-s
+           <int>] [--minScore_a <int>] [--minScore_b <float>] [-l <int>]
+           [--minLength_a <int>] [--minLength_b <float>] [-U <int>] [-u
+           <int>] [-r <int>] [-R <int>] [--lastSeq <int>] [--firstSeq
+           <int>] [-D] [--maxPerfection <float>] [--minPerfection <float>]
+           [-f <int>] [--maskLower] [--STAMPrun] [--maskX] [--outputFormat
+           <int>] [--printRepeatSeqMode <int>] [--NPerfectionMode <int>]
+           [--reportUnit <int>] [--preferShorterRepeats] [--NsAsMissense]
+           [-N <int>] [--sequenceInfoAsComment] [--convert_gaps_to_Ns] [--]
+           [-v] [-h] <Input and output filenames> ...
+
+
+Where: 
+
+   -M <exact|extendExact|imperfect>,  --searchMode <exact|extendExact
+      |imperfect>
+     (value required)  Phobos provides three different search modes. exact:
+     Search for exact repeats, only. extendExact: Searches for exact
+     repeats and extends them by inserting mismatches and indels.
+     imperfect: Searches directly for imperfect repeats.
+
+   -g <int>,  --indelScore <int>
+     (value required)  Score for indels - must be negative. Default: -5.
+     Match score is fixed to one.
+
+   -m <int>,  --mismatchScore <int>
+     (value required)  Score for mismatch - must be negative. Default: -5.
+     Match score is fixed to one.
+
+   -s <int>,  --minScore <int>
+     (value required)  The minimum score of a repeat is determined with:
+     maximum( minScore, minScore_a + minScore_b*(unit-length) ). Default
+     value of minScore: 6
+
+   --minScore_a <int>
+     (value required)  The minimum score of a repeat is determined with:
+     maximum( minScore, minScore_a + minScore_b*(unit-length) ). Default
+     value of minScore_a: 0
+
+   --minScore_b <float>
+     (value required)  The minimum score of a repeat is determined with:
+     maximum( minScore, minScore_a + minScore_b*(unit-length) ). Default
+     value of minScore_b: 1
+
+   -l <int>,  --minLength <int>
+     (value required)  The minimum length of a repeat is determined with:
+     maximum( minLength, minLength_a + minLength_b*(unit-length) ). Default
+     value of minLength: 0
+
+   --minLength_a <int>
+     (value required)  The minimum length of a repeat is determined with:
+     maximum( minLength, minLength_a + minLength_b*(unit-length) ). Default
+     value of minLength_a: 0
+
+   --minLength_b <float>
+     (value required)  The minimum length of a repeat is determined with:
+     maximum( minLength, minLength_a + minLength_b*(unit-length) ). Default
+     value of minLength_b: 0
+
+   -U <int>,  --maxUnitLen <int>
+     (value required)  Maximum unit length. Default: 10
+
+   -u <int>,  --minUnitLen <int>
+     (value required)  Minimum unit length. Default: 1
+
+   -r <int>,  --recursion <int>
+     (value required)  The recursion depth used in the search. Values in
+     the range 3 to 7 are recommended. A value of 0 implies a search for
+     perfect repeats only.
+
+   -R <int>,  --maximum_score_reduction <int>
+     (value required)  The maximum amount the score can be reduced before
+     search is aborded. Typical: 6*mismatch-penalty or infinite. Default:
+     infinite
+
+   --lastSeq <int>
+     (value required)  Number of last sequence to be processed in this run.
+
+   --firstSeq <int>
+     (value required)  Number of first sequence to be processed in this
+     run.
+
+   -D,  --dontRemoveMostlyOverlapping
+     Phobos sometimes finds repeats that partially or completely overlap
+     with other repeats, e.g. if alignments with alternative repeat
+     patterns exist at the same locus in a sequence. The default is to
+     remove one of any two mostly overlapping repeats in favour of that
+     repeat with the highest score. With this option, Phobos reports also
+     repeats that mostly overlap with higher scoring repeats.
+
+   --maxPerfection <float>
+     (value required)  Maximum perfection of a satellites. Default: 100.
+
+   --minPerfection <float>
+     (value required)  Minimum perfection of a satellites. Default: 0.
+
+   -f <int>,  --flanking <int>
+     (value required)  If the satellite sequence is printed, this is the
+     number of flanking nucleotides to be printed to the left and right of
+     it. Default: 0
+
+   --maskLower
+     Writes the sequences to a file with the extension ".masked" in which
+     repeats are masked by lower case letters. Currently, this option has
+     the sometimes unwanted side effect of changing all ambiguity codes to
+     Ns.
+
+   --STAMPrun
+     This option tells Phobos that it called from STAMP, which slighly
+     alters the output, mostly to be backward compatible with older
+     versions with less lines of output.
+
+   --maskX
+     Writes the sequences to a file with the extension ".masked" in which
+     repeats are masked by the X character. Currently, this option has the
+     sometimes unwanted side effect of changing all ambiguity codes to Ns.
+
+   --outputFormat <int>
+     (value required)  Phobos provides different output formats for
+     printing the repeat information. 0: Phobos output format, 1: extended
+     Phobos output format, 2: gff - general feature format, 3: one-per-line
+     format, 4: as fasta sequence
+
+   --printRepeatSeqMode <int>
+     (value required)  Phobos provides different modes to print the repeat
+     sequence along with its information. 0: don't print sequence, 1: print
+     sequence, 2: print alignment.
+
+   --NPerfectionMode <int>
+     (value required)  Phobos provides different modes to treat N's when
+     computing the perfection of a repeat. 0: asMismatch, 1: asNeutral, 2:
+     asMatch. Default: 0
+
+   --reportUnit <int>
+     (value required)  Repeat units can be reported in three different
+     modes. 0: asIs, 1: Alphabetical normal form, 2: Alphabetical normal
+     form also considering the reverse complement. Default: 2
+
+   --preferShorterRepeats
+     For two alignments of the same repeat that have the same score, Phobos
+     reports by default (since version 3.3.9) the longer alignment. The
+     longer alignment will have more mismatches/gaps and a lower
+     perfection. With this option, Phobos will choose the shorter of the
+     two alignments instead of the longer. Phobos will run faster with this
+     option.
+
+   --NsAsMissense
+     Treat N's as missense. Default: Treat N's as neutral with score 0.
+
+   -N <int>,  --succN <int>
+     (value required)  The maximum number of successive N's allowed in a
+     satellite. Default: 2.
+
+   --sequenceInfoAsComment
+     In the GFF and one-per-line output modes, show additional sequence
+     information in the output file as a comment.
+
+   --convert_gaps_to_Ns
+     Some basecaller introduce gaps which naturally should be Ns.With this
+     option we convert gaps to Ns. Otherwise gaps are excised from the
+     sequence. (The '*' characters, which was introduced in some older
+     programs is treated in the same way as gaps.)
+
+   --,  --ignore_rest
+     Ignores the rest of the labeled arguments following this flag.
+
+   -v,  --version
+     Displays version information and exits.
+
+   -h,  --help
+     Displays usage information and exits.
+
+   <Input and output filenames>  (accepted multiple times)
+     (value required)  Phobos requires either one or two file names as
+     parameters. The first must be the input file in FASTA format. If a
+     second file is specified, output is written to it. If no second file
+     is given, output is written to the console. 
+
+
+   This program searches for tandemly repeated patterns in DNA sequences.
+
